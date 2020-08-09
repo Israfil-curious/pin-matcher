@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="pinScreen" class="form-control" type="text" value="">
+                    <button id="generatePin" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="userDisplay" class="form-control" type="text" value="">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                                <div class="button">7</div>
+                                <div class="button">8</div>
+                                <div class="button">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button">4</div>
+                                <div class="button">5</div>
+                                <div class="button">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button">1</div>
+                                <div class="button">2</div>
+                                <div class="button">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button">
+                                    <</div>
+                                        <div class="button">0</div>
+                                        <div class="button">C</div>
+                                </div>
+                                <div>
+                                    <button id="submit" type="submit" class="submit-btn">Submit</button>
+                                    <p class="action-left">3 try left</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="notify-section">
+                    <p id="pinDontMatched" class="notify">❌ Pin Didn't Match, Please try again</p>
+                    <p id="pinMatched" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const generatePinButton = document.getElementById("generatePin");
+        generatePinButton.addEventListener("click", function() {
+
+            let pinScreen = document.getElementById("pinScreen");
+            if (pinScreen.value == "") {
+                getRandomNumber();
+            } else {
+                pinScreen.value = "";
+                getRandomNumber();
+            }
+            isMatchedDontShow();
+
+        })
+
+        let buttons = document.getElementsByClassName("button");
+        let userDisplay = document.getElementById("userDisplay");
+        userDisplay.value = "";
+        for (item of buttons) {
+            item.addEventListener("click", function(e) {
+
+                let buttonText = e.target.innerText;
+
+                if (buttonText == "C") {
+                    userDisplay.value = "";
+                } else if (buttonText == "<") {
+
+                    var displayString = userDisplay.value;
+                    var displayStringLength = displayString.length;
+
+                    var displayNewString = "";
+                    for (var i = 0; i < displayStringLength - 1; i++) {
+
+                        displayNewString = displayNewString + displayString[i];
+
+                    }
+                    userDisplay.value = displayNewString;
+
+                } else {
+                    userDisplay.value += buttonText;
+                }
+
+                isMatchedDontShow();
+
+            })
+        }
+
+        const submitButton = document.getElementById("submit");
+        submitButton.addEventListener("click", function() {
+
+            const pinScreen = document.getElementById("pinScreen");
+            const pinScreenString = pinScreen.value;
+            if (pinScreenString == userDisplay.value) {
+                const pinMatched = document.getElementById("pinMatched");
+                pinMatched.style.display = "block";
+
+            } else {
+                const pinDontMatched = document.getElementById("pinDontMatched");
+                pinDontMatched.style.display = "block";
+                pinScreen.value = "";
+                userDisplay.value = "";
+            }
+        })
+
+        function getRandomNumber() {
+            const random = Math.random() * 9;
+            const randomNumber = Math.round(random);
+            const randomA = Math.random() * 9;
+            const randomNumberA = Math.round(randomA);
+            const randomB = Math.random() * 9;
+            const randomNumberB = Math.round(randomB);
+            const randomC = Math.random() * 9;
+            const randomNumberC = Math.round(randomC);
+            const randomScreen = randomNumberA;
+
+            pinScreen.value += randomNumber;
+            pinScreen.value += randomNumberA;
+            pinScreen.value += randomNumberB;
+            pinScreen.value += randomNumberC;
+        }
+
+        function isMatchedDontShow() {
+            const pinMatched = document.getElementById("pinMatched");
+            pinMatched.style.display = "none";
+
+            const pinDontMatched = document.getElementById("pinDontMatched");
+            pinDontMatched.style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
